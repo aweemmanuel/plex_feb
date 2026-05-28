@@ -60,10 +60,11 @@ if [ "$SYNC_MODE" = "mount" ]; then
 else
     echo "🔄 Starting rclone SYNC mode (every ${SYNC_INTERVAL}m)..."
 
-    # Initial sync before Plex starts
-    echo "⏳ Running initial sync..."
-    /sync-media.sh || echo "⚠️  Initial sync had issues, continuing..."
-    echo "✅ Initial sync complete"
+    # Start initial sync in background (don't wait for it)
+    echo "⏳ Starting background sync..."
+    /sync-media.sh >> /var/log/plex-railway/sync.log 2>&1 &
+    SYNC_PID=$!
+    echo "✅ Background sync started (PID: $SYNC_PID)"
 
     # Set up cron for recurring sync
     echo "*/${SYNC_INTERVAL} * * * * /sync-media.sh >> /var/log/plex-railway/sync.log 2>&1" | crontab -
@@ -144,3 +145,4 @@ echo "============================================"
 
 # ── 9. Keep container alive, monitor Plex ────────────────────────────────────
 wait $PLEX_PID
+
