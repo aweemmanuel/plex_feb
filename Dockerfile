@@ -54,8 +54,7 @@ RUN chmod +x \
 # Expose Plex port
 EXPOSE 32400
 
-# Volumes
-VOLUME ["/data", "/config", "/transcode"]
+# Volumes are managed via Railway Volumes in railway.toml (/data, /config, /transcode)
 
 # Healthcheck
 HEALTHCHECK --interval=60s --timeout=10s --start-period=120s --retries=3 \
