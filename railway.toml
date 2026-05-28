@@ -1,0 +1,21 @@
+# railway.toml — Railway deployment configuration
+
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "/entrypoint.sh"
+healthcheckPath = "/identity"
+healthcheckTimeout = 120
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5
+
+[[deploy.volumeMounts]]
+mountPath = "/data"
+
+[[deploy.volumeMounts]]
+mountPath = "/config"
+
+[[deploy.volumeMounts]]
+mountPath = "/transcode"
